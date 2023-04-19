@@ -1,24 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Menampilkan nilai header HTTP Response</title>
+  <title>Contoh Penggunaan XMLHttpRequest</title>
 </head>
 <body>
-	<h1>Menampilkan nilai header HTTP Response</h1>
-	<div id="response-headers"></div>
-	<script>
-		var xhr = new XMLHttpRequest();
-		xhr.open('POST', 'https://api.usdt.com/uc/member/personal/detail');
-		xhr.setRequestHeader('Content-Type', 'application/json');
-		xhr.onreadystatechange = function() {
-		  if (xhr.readyState === 4 && xhr.status === 200) {
-		    var xAuthToken = xhr.getResponseHeader('x-auth-token');
-		    var accessControlAllowMethods = xhr.getResponseHeader('Access-Control-Allow-Methods');
-		    var responseHeadersDiv = document.getElementById('response-headers');
-		    responseHeadersDiv.innerHTML = '<p>x-auth-token: ' + xAuthToken + '</p><p>Access-Control-Allow-Methods: ' + accessControlAllowMethods + '</p>';
-		  }
-		};
-		xhr.send(JSON.stringify({ name: 'John Doe' }));
-	</script>
+  <h1>Contoh Penggunaan XMLHttpRequest</h1>
+  <p id="hasilRequest"></p>
+
+  <script>
+    // Membuat objek XMLHttpRequest
+    var xhr = new XMLHttpRequest();
+
+    // Menentukan jenis permintaan dan URL tujuan
+    xhr.open("OPTIONS", "https://api.usdt.com/uc/member/personal/detail");
+
+    // Menambahkan header permintaan yang diperlukan
+    xhr.setRequestHeader("Access-Control-Request-Method", "POST");
+    xhr.setRequestHeader("Access-Control-Request-Headers", "agents,deviceid,platform-logo,platformlogo,terminal,x-auth-token");
+    xhr.setRequestHeader("Origin", "https://m.uugame.org");
+    xhr.setRequestHeader("Referer", "https://m.uugame.org/");
+
+    // Menambahkan event listener untuk menangani hasil permintaan
+    xhr.onload = function() {
+      // Jika permintaan berhasil
+      if (xhr.status === 200) {
+        // Menampilkan hasil request
+        var hasilRequest = document.getElementById("hasilRequest");
+        hasilRequest.innerHTML += "agents: " + xhr.getResponseHeader("agents") + "<br>";
+        hasilRequest.innerHTML += "deviceid: " + xhr.getResponseHeader("deviceid") + "<br>";
+        hasilRequest.innerHTML += "platform-logo: " + xhr.getResponseHeader("platform-logo") + "<br>";
+        hasilRequest.innerHTML += "platformlogo: " + xhr.getResponseHeader("platformlogo") + "<br>";
+        hasilRequest.innerHTML += "terminal: " + xhr.getResponseHeader("terminal") + "<br>";
+        hasilRequest.innerHTML += "x-auth-token: " + xhr.getResponseHeader("x-auth-token");
+      } else {
+        // Jika permintaan gagal
+        console.log("Permintaan gagal. Kode status: " + xhr.status);
+      }
+    };
+
+    // Mengirim permintaan
+    xhr.send();
+  </script>
 </body>
 </html>
