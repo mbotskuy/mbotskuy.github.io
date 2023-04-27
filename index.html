@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Pre-flight CORS Request</title>
-	<script>
-		var url = 'https://api.usdt.com/uc/member/personal/detail';
-		var xhr = new XMLHttpRequest();
-		xhr.open('OPTIONS', url);
-		xhr.setRequestHeader('Access-Control-Request-Method', 'POST');
-		xhr.setRequestHeader('Access-Control-Request-Headers', 'agents,deviceid,platform-logo,platformlogo,terminal,x-auth-token');
-		xhr.setRequestHeader('Origin', 'https://m.uugame.org');
-		xhr.onreadystatechange = function() {
-			if (xhr.readyState === XMLHttpRequest.DONE) {
-				console.log(xhr.getAllResponseHeaders());
-			}
-		};
-		xhr.send();
-	</script>
-</head>
-<body>
-</body>
+	<head>
+		<script src="https://incarnate.github.io/curl-to-php/resources/js/jquery.min.js" type="text/javascript"></script>
+		<script src="https://incarnate.github.io/curl-to-php/resources/js/highlight.pack.js" type="text/javascript"></script>
+		<script src="https://incarnate.github.io/curl-to-php/resources/js/common.js" type="text/javascript"></script>
+		<!--<script src="resources/js/json-to-PHP.js" type="text/javascript"></script> -->
+		<script src="https://incarnate.github.io/curl-to-php/resources/js/curl-to-php.js" type="text/javascript"></script>
+		<link rel="stylesheet" href="https://incarnate.github.io/curl-to-php/resources/css/color-brewer.css">
+		<link rel="stylesheet" href="https://incarnate.github.io/curl-to-php/resources/css/common.css">
+	</head>
+	<body>
+		<main>
+			<textarea id="input" rows="4" placeholder="Paste curl here"></textarea>
+			<div id="output"></div>
+		</main>
+
+
+
+
+	</body>
 </html>
