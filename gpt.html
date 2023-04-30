@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.">
+    <title>Download Video</title>
+    <style>
+      body {
+        text-align: center;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 20px;
+        box-sizing: border-box;
+        text-align: center;
+      }
+
+      .flex-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 23vh;
+      }
+
+      input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        box-sizing: border-box;
+        border: 2px solid #ccc;
+        border-radius: 4px;
+      }
+
+      button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      h1 {
+        font-size: 36px;
+      }
+
+      .result-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+        text-align: center;
+      }
+
+      .parent-element {
+        text-align: center;
+      }
+
+      @media only screen and (max-width: 600px) {
+        .container {
+          max-width: 400px;
+        }
+
+        h1 {
+          font-size: 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container flex-container">
+      <h1>Download Video</h1>
+      <input type="text" id="url-input" placeholder="Masukan URL video">
+      <button onclick="convertVideo()">Convert</button>
+    </div>
+
+    <script>
+      let previousResultContainer = null;
+
+function convertVideo() {
+  const url = document.getElementById("url-input").value;
+  fetch("https://ssyoutube.com/api/convert", {
+    method: "POST",
+    body: JSON.stringify({ "url": url }),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log(data);
+    // Menampilkan bagian-bagian tertentu dari respons API
+    const resultContainer = document.createElement("div");
+    const title = data.meta.title;
+    const thumb = data.thumb;
+    const hosting = data.hosting;
+    const duration = data.meta.duration;
+    const videoUrl = data.url[0].url;
+    
+    resultContainer.innerHTML = `<div class="result-title">Video ${hosting}</div>`;
+    resultContainer.innerHTML += `<img src="${thumb}" style="width: 250px; height: auto;"/>`;
+resultContainer.innerHTML += `<div class="result-title">${title}</div>`;
+    resultContainer.innerHTML += `<div>Durasi ${duration}</div>`;
+
+    // Menambahkan tombol "Download" dan event listener
+    const downloadButton = document.createElement("button");
+    downloadButton.textContent ="Download";
+    downloadButton.addEventListener("click", () => {
+      window.open(videoUrl, "_blank");
+    });
+    resultContainer.appendChild(downloadButton);
+    
+    // Hapus elemen HTML hasil konversi sebelumnya (jika ada)
+    if (previousResultContainer !== null) {
+      previousResultContainer.remove();
+    }
+
+    document.body.appendChild(resultContainer);
+    previousResultContainer = resultContainer;
+  })
+  .catch(error => console.error(error));
+}
+
+    </script>
+  </body>
+</html>
