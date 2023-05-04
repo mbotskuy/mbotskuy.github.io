@@ -1,12 +1,5 @@
 let previousResultContainer = null;
 
-function showLoader() {
-
-        const loader = document.getElementById("img");
-
-        loader.style.display = "block";
-
-      }
 
 function convertVideo() {
 
