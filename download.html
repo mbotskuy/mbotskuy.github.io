@@ -1,154 +1,217 @@
 <!DOCTYPE html>
+
 <html>
+
   <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.">
-    <title>Download Video</title>
+
+    <title>Online Video Downloader</title>
+
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+
     <style>
+
       body {
+
         font-family: 'Roboto', sans-serif;
+
         background-color: #f5f5f5;
+
         text-align: center;
+
         margin: 0;
+
         padding: 0;
+
       }
 
       .container {
+
         width: 100%;
+
         max-width: 800px;
+
         margin: 0 auto;
+
         padding: 0 20px;
+
         box-sizing: border-box;
+
         text-align: center;
+
       }
 
       .flex-container {
+
         display: flex;
+
         flex-direction: column;
+
         align-items: center;
+
         justify-content: center;
+
         height: 23vh;
+
       }
 
       input[type="text"] {
+
         width: 100%;
+
         padding: 10px;
+
         margin: 10px 0;
+
         box-sizing: border-box;
+
         border: 2px solid #ccc;
+
         border-radius: 4px;
+
       }
 
       button {
+
         background-color: #4CAF50;
+
         color: white;
+
         padding: 10px 20px;
+
         border: none;
+
         border-radius: 4px;
+
         cursor: pointer;
+
         font-size: 16px;
+
         transition: background-color 0.3s;
+
       }
 
       button:hover {
+
         background-color: #45a049;
+
       }
 
       h1 {
+
         font-size: 36px;
+
         color: #333;
+
         margin-top: 40px;
+
       }
 
       .result-title {
+
         font-size: 1.5rem;
+
         font-weight: bold;
+
         margin-bottom: 1rem;
+
         text-align: center;
+
         color: #333;
+
+      }
+
+      .result-title1 {
+
+        font-size: 1rem;
+
+        font-weight: bold;
+
+        margin-bottom: 1rem;
+
+        text-align: center;
+
+        color: #333;
+
       }
 
       .parent-element {
+
         text-align: center;
+
       }
 
       @media only screen and (max-width: 600px) {
+
         .container {
+
           max-width: 400px;
+
         }
 
         h1 {
+
           font-size: 24px;
+
         }
-      }
-      footer {
-        background-color: #ddd;
-        padding: 20px;
-        text-align: center;
+
       }
 
-    </style>
-  </head>
-  <body>
-    <div class="container flex-container">
-      <h1>Download Video</h1>
-      <input type="text" id="url-input" placeholder="Masukkan URL video">
-      <button onclick="convertVideo()">Convert</button>
-      
-    </div>
+.bottom {
 
-    <script>
-      let previousResultContainer = null;
+  position: fixed;
 
-function convertVideo() {
-  const url = document.getElementById("url-input").value;
-  fetch("https://ssyoutube.com/api/convert", {
-    method: "POST",
-    body: JSON.stringify({ "url": url }),
-    headers: {
-      "Content-Type": "application/json"
-    }
-  })
-  .then(response => response.json())
-  .then(data => {
-    console.log(data);
+  bottom: 0;
 
-    const resultContainer = document.createElement("div");
-    const title = data.meta.title;
-    const thumb = data.thumb;
-    const hosting = data.hosting;
-    const duration = data.meta.duration;
-    const videoUrl = data.url[0].url;
-    
-    resultContainer.innerHTML = `<div class="result-title">Video ${hosting}</div>`;
-    resultContainer.innerHTML += `<img src="${thumb}" style="width: 250px; height: auto;"/>`;
-resultContainer.innerHTML += `<div class="result-title">${title}</div>`;
-    resultContainer.innerHTML += `<div>Durasi ${duration}</div>`;
+  width: 100%;
 
+  background-color: #f5f5f5;
 
-    const downloadButton = document.createElement("button");
-    downloadButton.textContent ="Download";
-    downloadButton.addEventListener("click", () => {
-      window.open(videoUrl, "_blank");
-    });
-    resultContainer.appendChild(downloadButton);
-    
+  padding: 20px;
 
-    if (previousResultContainer !== null) {
-      previousResultContainer.remove();
-    }
+  box-sizing: border-box;
 
-    document.body.appendChild(resultContainer);
-    previousResultContainer = resultContainer;
-  })
-  .catch(error => console.error(error));
+  text-align: center;
+
 }
 
-    </script>
-    
+    </style>
 
-    
+  </head>
+
+  <body>
+
+    <div class="container flex-container">
+
+      <h1>Online Video Downloader</h1>
+
+            <div>TikTok - YouTube - Instagram - Facebook</div>
+
+      <input type="text" id="url-input" placeholder="Masukkan URL video">
+
+   <button onclick="convertVideo()">Convert</button>
+
+      <img src="https://ssyoutube.com/img/loader.svg" id="img" width="60" height="60" style="display: none;">
+
+    </div>
+
+<script src="script.js"></script>
+
+                                
+
+<div class="bottom">
+
+© 2023 Online Video Downloader by 
+
+<a href="https://t.me/Mbotskuy">@Mbotskuy</a>
+
+</div>
+
   </body>
+
   
+
 </html>
