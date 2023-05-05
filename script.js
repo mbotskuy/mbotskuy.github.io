@@ -40,8 +40,7 @@ const loader = document.getElementById("img");
 
     const videoUrl = data.url[0].url;
 
-    const musikUrl = data.url[1].url;
-
+    
                              
 
     resultContainer.innerHTML = `<div class="result-title">Sumber video ${hosting}</div>`;
@@ -61,22 +60,6 @@ resultContainer.innerHTML += `<div class="result-title">${title}</div>`;
       window.open(videoUrl, "_blank");
 
     });
-
-    resultContainer.appendChild(downloadButton);
-
-resultContainer.innerHTML += `<div  class="result-title2">-</div>`;
-
-        const downloadButton1 = document.createElement("button");
-
-    downloadButton1.textContent ="Download Musik";
-
-    downloadButton1.addEventListener("click", () => {
-
-      window.open(musikUrl, "_blank");
-
-    });
-
-    resultContainer.appendChild(downloadButton1);
 
     if (previousResultContainer !== null) {
 
