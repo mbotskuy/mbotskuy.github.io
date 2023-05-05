@@ -46,7 +46,7 @@ const loader = document.getElementById("img");
 
     resultContainer.innerHTML = `<div class="result-title">Sumber video ${hosting}</div>`;
 
-    resultContainer.innerHTML += `<img src="${thumb}" style="width: 250px; height: auto;"/>`;
+    resultContainer.innerHTML += `<img src="${thumb}" style="width: 200px; height: auto;"/>`;
 
 resultContainer.innerHTML += `<div class="result-title">${title}</div>`;
 
