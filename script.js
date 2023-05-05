@@ -51,7 +51,7 @@ const loader = document.getElementById("img");
 
 resultContainer.innerHTML += `<div class="result-title">${title}</div>`;
 
-    resultContainer.innerHTML += `<div class="result-title1">Duras ${duration}</div>`;
+    resultContainer.innerHTML += `<div class="result-title1">Durasi ${duration}</div>`;
 
     const downloadButton = document.createElement("button");
 
