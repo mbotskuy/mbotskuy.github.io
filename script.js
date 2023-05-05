@@ -61,6 +61,21 @@ resultContainer.innerHTML += `<div class="result-title">${title}</div>`;
 
     });
     resultContainer.appendChild(downloadButton);
+    resultContainer.innerHTML += `<div class="result-title2">-</div>`;
+
+resultContainer.innerHTML += `<div class="result-title2">-</div>`;
+
+resultContainer.innerHTML += `<div class="result-title2">-</div>`;
+
+resultContainer.innerHTML += `<div class="result-title2">-</div>`;
+
+resultContainer.innerHTML += `<div class="result-title2">-</div>`;
+
+resultContainer.innerHTML += `<div class="result-title2">-</div>`;
+
+resultContainer.innerHTML += `<div class="result-title2">-</div>`;
+
+resultContainer.innerHTML += `<div class="result-title2">-</div>`;
 
     if (previousResultContainer !== null) {
 
