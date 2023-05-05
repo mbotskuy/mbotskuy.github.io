@@ -60,6 +60,7 @@ resultContainer.innerHTML += `<div class="result-title">${title}</div>`;
       window.open(videoUrl, "_blank");
 
     });
+    resultContainer.appendChild(downloadButton);
 
     if (previousResultContainer !== null) {
 
