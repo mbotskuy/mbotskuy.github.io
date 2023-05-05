@@ -1,6 +1,5 @@
 let previousResultContainer = null;
 
-
 function convertVideo() {
 
 const loader = document.getElementById("img");
@@ -41,7 +40,7 @@ const loader = document.getElementById("img");
 
     const videoUrl = data.url[0].url;
 
-    
+    const musikUrl = data.url[1].url;
 
                              
 
@@ -55,7 +54,7 @@ resultContainer.innerHTML += `<div class="result-title">${title}</div>`;
 
     const downloadButton = document.createElement("button");
 
-    downloadButton.textContent ="Download";
+    downloadButton.textContent ="Download Video";
 
     downloadButton.addEventListener("click", () => {
 
@@ -65,7 +64,19 @@ resultContainer.innerHTML += `<div class="result-title">${title}</div>`;
 
     resultContainer.appendChild(downloadButton);
 
-    
+resultContainer.innerHTML += `<div  class="result-title2">-</div>`;
+
+        const downloadButton1 = document.createElement("button");
+
+    downloadButton1.textContent ="Download Musik";
+
+    downloadButton1.addEventListener("click", () => {
+
+      window.open(musikUrl, "_blank");
+
+    });
+
+    resultContainer.appendChild(downloadButton1);
 
     if (previousResultContainer !== null) {
 
