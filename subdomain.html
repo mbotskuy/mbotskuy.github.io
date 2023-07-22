@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+  font-family: "Courier New", monospace;
+  background-color: #000;
+  color: #0f0;
+  padding: 20px;
+}
+
+pre {
+  background-color: #000;
+  border: 1px solid #0f0;
+ font-size: 18px;
+  padding: 20px 24px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+input[type="text"] {
+  padding: 10px;
+  font-size: 16px;
+  background-color: #000;
+  color: #0f0;
+  border: 1px solid #0f0;
+  border-radius: 4px;
+  width: 300px;
+}
+
+input[type="submit"] {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #000;
+  color: #0f0;
+  border: 1px solid #0f0;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.glitch-wrapper {
+   width: 100%;
+   height: 100%;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   text-align: center;
+   background-color: #222;
+}
+
+.glitch {
+   position: relative;
+   font-size: 80px;
+   font-weight: 700;
+   line-height: 1.2;
+   color: #fff;
+   letter-spacing: 5px;
+   z-index: 1;
+}
+
+.glitch:before,
+.glitch:after {
+   display: block;
+   content: attr(data-glitch);
+   position: absolute;
+   top: 0;
+   left: 0;
+   opacity: 0.8;
+}
+
+.glitch:before {
+   animation: glitch-color 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+   color: #0ff;
+   z-index: -1;
+}
+
+.glitch:after {
+   animation: glitch-color 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) reverse both infinite;
+   color: #ff00ff;
+   z-index: -2;
+}
+
+@keyframes glitch-color {
+   0% {
+      transform: translate(0);
+   }
+
+   20% {
+      transform: translate(-3px, 3px);
+   }
+
+   40% {
+      transform: translate(-3px, -3px);
+   }
+
+   60% {
+      transform: translate(3px, 3px);
+   }
+
+   80% {
+      transform: translate(3px, -3px);
+   }
+
+   to {
+      transform: translate(0);
+   }
+}
+
+
+  </style>
+</head>
+<body>
+  <h1 class="glitch" data-glitch="XNEWBIE">XNEWBIE</h1>
+  <h1>Free subdomain scanner</h1>
+  <form>
+    <label for="url"></label>
+    <input type="text" id="url" name="url" placeholder="Enter URL">
+    <input type="submit" value="Search">
+  </form>
+  <br>
+  <pre id="result"></pre>
+
+  <script>
+    const form = document.querySelector('form');
+const result = document.getElementById('result');
+const dok = document.getElementById('dok');
+const text = 'Tools Free Subdomain Scanner adalah alat yang berguna bagi pengguna yang ingin menemukan subdomain yang terkait dengan domain utama secara gratis. Dengan menggunakan tools ini, pengguna dapat meningkatkan keamanan situs web dan mengoptimalkan konfigurasi situs web dengan lebih efisien.';
+let index = 0;
+
+function typeEffect() {
+  if (index < text.length) {
+    result.textContent += text.charAt(index);
+    index++;
+    setTimeout(typeEffect, 10);
+  }
+}
+
+typeEffect();
+form.addEventListener('submit', function(event) {
+  event.preventDefault();
+  const url = document.getElementById('url').value;
+  fetch(`https://api.hackertarget.com/hostsearch/?q=${url}`)
+    .then(response => response.text())
+    .then(data => {
+      if (data.includes("API count exceeded")) {
+        result.textContent = "Error (Terlalu banyak percobaan)\nHarap mode pesawat terlebih dahulu, lalu coba lagi.";
+      } else {
+        const rules = data;
+        const rulesArray = rules.split('\n');
+        let output = '';
+
+        rulesArray.forEach(rule => {
+          const parts = rule.split(',');
+          if (parts.length === 2) {
+            const beforeComma = parts[0].trim();
+            const afterComma = parts[1].trim();
+            output += `${beforeComma.padEnd(30)}  ${afterComma.padStart(15)}\n`;
+          }
+        });
+
+        result.textContent = output;
+      }
+    })
+    .catch(error => {
+      console.log(error);
+      result.textContent = 'An error occurred. Please try again later.';
+    });
+});
+
+  </script>
+</body>
+</html>
