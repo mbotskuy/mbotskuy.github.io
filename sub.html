@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      padding: 20px;
+    }
+
+    pre {
+      background-color: #fff;
+      border: 1px solid #ccc;
+      padding: 10px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      width: 300px;
+    }
+
+    input[type="submit"] {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Subdomain</h1>
+  <form>
+    <label for="url"></label>
+    <input type="text" id="url" name="url" placeholder="Enter URL">
+    <input type="submit" value="Search">
+  </form>
+  <br>
+  <pre id="result"></pre>
+
+  <script>
+    const form = document.querySelector('form');
+const result = document.getElementById('result');
+
+form.addEventListener('submit', function(event) {
+  event.preventDefault();
+  const url = document.getElementById('url').value;
+  fetch(`https://api.hackertarget.com/hostsearch/?q=${url}`)
+    .then(response => response.text())
+    .then(data => {
+      if (data.includes("API count exceeded - Increase Quota with Membership")) {
+        result.textContent = "Error (Terlalu banyak percobaan)\nHarap mode pesawat terlebih dahulu, lalu coba lagi.";
+      } else {
+        const resultsArray = data.split('\n');
+        const formattedResults = resultsArray.map(result => {
+          const [url, ip] = result.split(',');
+          return `${url.trim()} - ${ip.trim()}`;
+        });
+        result.textContent = formattedResults.join('\n');
+      }
+    })
+    .catch(error => {
+      result.textContent = 'An error occurred. Please try again later.';
+    });
+});
+
+
+  </script>
+</body>
+</html>
