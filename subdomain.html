@@ -12,10 +12,10 @@
 pre {
   background-color: #000;
   border: 1px solid #0f0;
- font-size: 18px;
-  padding: 20px 24px;
+  padding: 20px;
   white-space: pre-wrap;
   word-wrap: break-word;
+  width: 368px;
 }
 
 input[type="text"] {
@@ -154,7 +154,7 @@ form.addEventListener('submit', function(event) {
           if (parts.length === 2) {
             const beforeComma = parts[0].trim();
             const afterComma = parts[1].trim();
-            output += `${beforeComma.padEnd(30)}  ${afterComma.padStart(15)}\n`;
+            output += `${beforeComma.padEnd(41)}  ${afterComma.padStart(15)}\n`;
           }
         });
 
