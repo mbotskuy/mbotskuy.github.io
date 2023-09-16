@@ -28,6 +28,9 @@
                             <div class="mb-3">
                                 <label for="game" class="form-label">Select Game</label>
                                 <select class="form-control blur" id="game" name="game">
+                                    <option value="Crazy Poki">Crazy Poki</option>
+                                    <option value="Diamond Flash">Diamond Flash</option>
+                                    <option value="Lost Treasure">Lost Treasure</option>
                                     <option value="Richy Panda">Richy Panda</option>
                                     <option value="The Power of Kitsune">The Power of Kitsune</option>
                                     <option value="Los Toros">Los Toros</option>
@@ -98,6 +101,21 @@
                 gameId = 72;
                 betPerLine = 100;
                 lines = 20;
+                doubleChance = false;
+            } else if (game === 'Crazy Poki') {
+                gameId = 42;
+                betPerLine = 20;
+                lines = 20;
+                doubleChance = false;
+            } else if (game === 'Lost Treasure') {
+                gameId = 27;
+                betPerLine = 10;
+                lines = 10;
+                doubleChance = false;
+            } else if (game === 'Diamond Flash') {
+                gameId = 2;
+                betPerLine = 20;
+                lines = 10;
                 doubleChance = false;
             }
             var ws_url = wsEndPoint + '?sessionToken=' + sessionToken + '&lang=' + lang + '&gameId=' + gameId;
@@ -257,11 +275,13 @@
                     };
 
                     ws.send(JSON.stringify(fs_message));
-                } else if (response.message === 'Betvalueis100' || response.message === 'Betvalueis50' || response.message === 'Betvalueis10') {
+                } else if (response.message === 'Betvalueis100' || response.message === 'Betvalueis50' || response.message === 'Betvalueis10' || response.message === 'Betvalueis20') {
     logToConsole("Done.");
     ws.close();
+                } else if (response.message === 'tournamentisfinish'){
+                  logToConsole("Tournament is finish");
+                  ws.close();
                 }
-
                 if (response.data) {
                     var win = response.data.win;
                     var lastWin = response.data.lastWin;
@@ -269,7 +289,7 @@
                     logToConsole("Win           : " + win);
                     logToConsole("Last Win  : " + lastWin);
                     logToConsole("Balance   : " + userBalance);
-                    logToConsole("------------------------------------");
+                    
                 }
             };
 
@@ -278,7 +298,7 @@
             };
 
             ws.onclose = function() {
-                logToConsole("Connection closed");
+                logToConsole("");
             };
 
             function logToConsole(message) {
