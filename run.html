@@ -3,238 +3,289 @@
 <head>
     <title>POPOK SPEED RUN</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/blur-admin/dist/css/blur-admin.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1 class="text-center">POPOK SPEED RUN</h1>
-        <form id="gameForm">
-            <label for="sessionToken">sessionToken</label>
-            <input type="text" id="sessionToken" name="sessionToken" required class="form-control">
-            <br><br>
-            <label for="gameSelect">Game</label>
-            <select id="gameSelect" name="gameSelect" class="form-control">
-                  <option value="Diamond Flash">Diamond Flash</option>
-                <option value="Richy Panda">Richy Panda</option>
-                <option value="Los Toros">Los Toros</option>
-                <option value="Lost Treasure">Lost Treasure</option>
-                <option value="The Power of Kitsune">The Power of Kitsune</option>
-                <option value="Crazy Poki">Crazy Poki</option>
-                <option value="Yummy: Buy Feature">Yummy: Buy Feature</option>
-                <option value="FastMaster">FastMaster</option>
-            </select>
-            <br><br>
-            <button type="submit" class="btn btn-primary">Play</button>
-            
-            <button type="button" id="stopButton" class="btn btn-secondary">Stop</button>
-        </form>
-        <textarea id="logTextarea" rows="10" cols="50" readonly class="form-control"></textarea>
-<button type="button" id="freeSpinButton" class="btn btn-primary">Freespin</button>
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-6">
+                <div class="card blur">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="card-title">POPOK SPEED RUN</h5>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="sessionToken" class="form-label">sessionToken</label>
+                                <input type="text" class="form-control blur" id="sessionToken" name="sessionToken">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="game" class="form-label">Select Game</label>
+                                <select class="form-control blur" id="game" name="game">
+                                    <option value="Richy Panda">Richy Panda</option>
+                                    <option value="The Power of Kitsune">The Power of Kitsune</option>
+                                    <option value="Los Toros">Los Toros</option>
+                                    <option value="FastMaster">FastMaster</option>
+                                    <option value="Yummy: Buy Feature">Yummy: Buy Feature</option>
+                                </select>
+                            </div>
+
+                            <button type="button" class="btn btn-primary blur" onclick="playGame()">Start</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-6">
+                <div class="card blur">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="card-title">Log</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="consoleContainer" style="height: 200px; overflow-y: scroll;">
+                            <textarea id="consoleOutput" rows="10" cols="50" readonly class="form-control blur"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
-        var intervalId;
 
-        function appendLog(message) {
-            var logTextarea = document.getElementById("logTextarea");
-            logTextarea.value += message + "\n";
-            logTextarea.scrollTop = logTextarea.scrollHeight;
-        }
 
-        document.getElementById("gameForm").addEventListener("submit", function(event) {
-            event.preventDefault();
-
+        function playGame() {
             var sessionToken = document.getElementById("sessionToken").value;
-            var selectedGame = document.getElementById("gameSelect").value;
+            var game = document.getElementById("game").value;
 
-            intervalId = setInterval(function() {
-                var command = {
-                    "command": "play",
-                    "data": {
-                        "action": "spin",
-                        "game": selectedGame,
-                        "gameId": getGameId(selectedGame),
-                        "betPerLine": getBetPerLine(selectedGame),
-                        "lines": getLines(selectedGame),
-                        "doubleChance": getDoubleChance(selectedGame),
-                        "gameMode": "real"
-                    },
-                    "cid": getCid(selectedGame)
-                };
+            var wsEndPoint = 'wss://ws-se1.pokgaming.com';
+            var lang = 'en';
+            var gameId = 0;
+            var betPerLine = 0;
+            var lines = 0;
+            var doubleChance = false;
+            var gameMode = 'real';
 
-                sendCommand(JSON.stringify(command), sessionToken);
-            }, 10);
-        });
-       var timeoutId;
-
-document.getElementById("freeSpinButton").addEventListener("click", function() {
-    var selectedGame = document.getElementById("gameSelect").value;
-    var sessionToken = document.getElementById("sessionToken").value;
-
-    function freeSpin() {
-        var command = {
-            "command": "play",
-            "data": {
-                "action": "freeSpin",
-                "game": selectedGame,
-                "gameId": getGameId(selectedGame),
-                "betPerLine": getBetPerLine(selectedGame),
-                "lines": getLines(selectedGame),
-                "doubleChance": getDoubleChance(selectedGame),
-                "gameMode": "real"
-            },
-            "cid": getCid(selectedGame)
-        };
-
-        sendCommand(JSON.stringify(command), sessionToken);
-
-        timeoutId = setTimeout(freeSpin, 1000);
-    }
-
-    freeSpin();
-});
-
-document.getElementById("stopButton").addEventListener("click", function() {
-    clearTimeout(timeoutId);
-});
-
-        document.getElementById("stopButton").addEventListener("click", function() {
-            clearInterval(intervalId);
-        });
-
-        function getGameId(game) {
-            switch (game) {
-                case "Diamond Flash":
-                    return 2;
-                case "Richy Panda":
-                    return 45;
-                case "Los Toros":
-                    return 52;
-                case "Lost Treasure":
-                    return 27;
-                case "The Power of Kitsune":
-                    return 72;
-                case "Crazy Poki":
-                    return 42;
-                case "Yummy: Buy Feature":
-                    return 28;
-                case "FastMaster":
-                    return 94;
-                default:
-                    return 0;
+            if (game === 'FastMaster') {
+                gameId = 94;
+                betPerLine = 100;
+                lines = 10;
+                doubleChance = false;
+            } else if (game === 'Los Toros') {
+                gameId = 52;
+                betPerLine = 50;
+                lines = 10;
+                doubleChance = false;
+            } else if (game === 'Yummy: Buy Feature') {
+                gameId = 28;
+                betPerLine = 100;
+                lines = 10;
+                doubleChance = false;
+            } else if (game === 'Richy Panda') {
+                gameId = 45;
+                betPerLine = 10;
+                lines = 10;
+                doubleChance = false;
+            } else if (game === 'The Power of Kitsune') {
+                gameId = 72;
+                betPerLine = 100;
+                lines = 20;
+                doubleChance = false;
             }
-        }
+            var ws_url = wsEndPoint + '?sessionToken=' + sessionToken + '&lang=' + lang + '&gameId=' + gameId;
 
-        function getBetPerLine(game) {
-            switch (game) {
-                case "Diamond Flash":
-                    return 20;
-                case "Richy Panda":
-                    return 10;
-                case "Los Toros":
-                    return 50;
-                case "Lost Treasure":
-                    return 10;
-                case "The Power of Kitsune":
-                    return 100;
-                case "Crazy Poki":
-                    return 20;
-                case "Yummy: Buy Feature":
-                    return 100;
-                case "FastMaster":
-                    return 100;
-                default:
-                    return 0;
-            }
-        }
-
-        function getLines(game) {
-            switch (game) {
-                case "Diamond Flash":
-                    return 10;
-                case "Richy Panda":
-                    return 10;
-                case "Los Toros":
-                    return 10;
-                case "Lost Treasure":
-                    return 10;
-                case "The Power of Kitsune":
-                    return 20;
-                case "Crazy Poki":
-                    return 20;
-                case "Yummy: Buy Feature":
-                    return 10;
-                case "FastMaster":
-                    return 10;
-                default:
-                    return 0;
-            }
-        }
-
-        function getDoubleChance(game) {
-            switch (game) {
-                case "Diamond Flash":
-                    return false;
-                case "Richy Panda":
-                    return false;
-                case "Los Toros":
-                    return false;
-                case "Lost Treasure":
-                    return false;
-                case "The Power of Kitsune":
-                    return false;
-                case "Crazy Poki":
-                    return false;
-                case "Yummy: Buy Feature":
-                    return false;
-                case "FastMaster":
-                    return false;
-                default:
-                    return false;
-            }
-        }
-
-        function getCid(game) {
-            switch (game) {
-                case "Diamond Flash":
-                    return 1;
-                case "Richy Panda":
-                    return 1;
-                case "Los Toros":
-                    return 1;
-                case "Lost Treasure":
-                    return 1;
-                case "The Power of Kitsune":
-                    return 1;
-                case "Crazy Poki":
-                    return 1;
-                case "Yummy: Buy Feature":
-                    return 1;
-                case "FastMaster":
-                    return 1;
-                default:
-                    return 0;
-            }
-        }
-
-        function sendCommand(command, sessionToken) {
-            var ws = new WebSocket("wss://ws-se1.pokgaming.com/?sessionToken=" + sessionToken + "&lang=en&gameId=94");
+            var ws = new WebSocket(ws_url);
 
             ws.onopen = function() {
-                appendLog("Connection established");
-                ws.send(command);
+                logToConsole("Connection opened");
+
+                for (var i = 0; i < 300; i++) {
+                    var message = {
+                        "command": "play",
+                        "data": {
+                            "action": "spin",
+                            "game": game,
+                            "gameId": gameId,
+                            "betPerLine": betPerLine,
+                            "lines": lines,
+                            "doubleChance": doubleChance,
+                            "gameMode": gameMode
+                        },
+                        "cid": i + 1
+                    };
+
+                    ws.send(JSON.stringify(message));
+                }
             };
 
             ws.onmessage = function(event) {
-    appendLog(event.data);
-    
-};
+                
 
+                var response = JSON.parse(event.data);
 
-            ws.onerror = function(error) {
-                appendLog("Error: " + error);
+                if (response.message === 'Gamestateis6') {
+                    var free_spin_message = {
+                        "command": "play",
+                        "data": {
+                            "action": "freeSpin",
+                            "game": game,
+                            "gameId": gameId,
+                            "betPerLine": betPerLine,
+                            "lines": lines,
+                            "doubleChance": doubleChance,
+                            "gameMode": gameMode
+                        },
+                        "cid": 4
+                    };
+
+                    ws.send(JSON.stringify(free_spin_message));
+                } else if (response.message === 'Backend error.') {
+                    var fs_message = {
+                        "command": "play",
+                        "data": {
+                            "action": "spin",
+                            "game": game,
+                            "gameId": gameId,
+                            "betPerLine": betPerLine,
+                            "lines": lines,
+                            "doubleChance": doubleChance,
+                            "gameMode": gameMode
+                        },
+                        "cid": 4
+                    };
+
+                    ws.send(JSON.stringify(fs_message));
+                } else if (response.message === 'Gamestateis4') {
+                    var fs4_message = {
+                        "command": "play",
+                        "data": {
+                            "action": "bonus",
+                            "game": game,
+                            "gameId": gameId,
+                            "betPerLine": betPerLine,
+                            "lines": lines,
+                            "doubleChance": doubleChance,
+                            "gameMode": gameMode
+                        },
+                        "cid": 4
+                    };
+                    ws.send(JSON.stringify(fs4_message));
+                    var fs3_message = {
+                        "command": "play",
+                        "data": {
+                            "action": "bonus",
+                            "game": game,
+                            "gameId": gameId,
+                            "level": 1,
+                            "gameMode": gameMode,
+                            "clickIndex": 2
+                        },
+                        "cid": 4
+                    };
+                    ws.send(JSON.stringify(fs3_message));
+                    var fs2_message = {
+                        "command": "play",
+                        "data": {
+                            "action": "bonus",
+                            "game": game,
+                            "gameId": gameId,
+                            "level": 2,
+                            "gameMode": gameMode,
+                            "clickIndex": 4
+                        },
+                        "cid": 4
+                    };
+                    ws.send(JSON.stringify(fs2_message));
+                } else if (response.message === 'Gamestateis5') {
+                    var fs5_message = {
+                        "command": "play",
+                        "data": {
+                            "action": "superBonus",
+                            "game": game,
+                            "gameId": gameId,
+                            "clickIndex": 4,
+                            "gameMode": gameMode
+                        },
+                        "cid": 4
+                    };
+
+                    ws.send(JSON.stringify(fs5_message));
+                    var fs4_message = {
+                        "command": "play",
+                        "data": {
+                            "action": "superBonus",
+                            "gameId": gameId,
+                            "clickIndex": 3,
+                            "gameMode": gameMode
+                        },
+                        "cid": 4
+                    };
+
+                    ws.send(JSON.stringify(fs4_message));
+                } else if (response.message === 'Gamestateis2') {
+                    var fs2_message = {
+                        "command": "play",
+                        "data": {
+                            "action": "collect",
+                            "gameId": gameId,
+                            "gameMode": gameMode
+                        },
+                        "cid": 4
+                    };
+
+                    ws.send(JSON.stringify(fs2_message));
+                    var fs_message = {
+                        "command": "play",
+                        "data": {
+                            "action": "spin",
+                            "game": game,
+                            "gameId": gameId,
+                            "betPerLine": betPerLine,
+                            "lines": lines,
+                            "doubleChance": doubleChance,
+                            "gameMode": gameMode
+                        },
+                        "cid": 4
+                    };
+
+                    ws.send(JSON.stringify(fs_message));
+                } else if (response.message === 'Betvalueis100' || response.message === 'Betvalueis50' || response.message === 'Betvalueis10') {
+    logToConsole("Done.");
+    ws.close();
+                }
+
+                if (response.data) {
+                    var win = response.data.win;
+                    var lastWin = response.data.lastWin;
+                    var userBalance = response.data.userBalance;
+                    logToConsole("Win           : " + win);
+                    logToConsole("Last Win  : " + lastWin);
+                    logToConsole("Balance   : " + userBalance);
+                    logToConsole("------------------------------------");
+                }
             };
 
-            
+            ws.onerror = function(error) {
+                logToConsole("Error: " + error);
+            };
+
+            ws.onclose = function() {
+                logToConsole("Connection closed");
+            };
+
+            function logToConsole(message) {
+                var consoleOutput = document.getElementById("consoleOutput");
+                consoleOutput.value += message + "\n";
+                consoleOutput.scrollTop = consoleOutput.scrollHeight;
+            }
         }
     </script>
 </body>
