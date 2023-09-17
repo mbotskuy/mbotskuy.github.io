@@ -132,7 +132,8 @@
         function playGame() {
             var sessionToken = document.getElementById("sessionToken").value;
             var game = document.getElementById("game").value;
-
+            var consoleOutput = document.getElementById("consoleOutput");
+    consoleOutput.value = "";
             var wsEndPoint = 'wss://ws-se1.pokgaming.com';
             var lang = 'en';
             var gameId = 0;
