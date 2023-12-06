@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>POPOK SPEED RUN</title>
+    <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/blur-admin/dist/css/blur-admin.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .footer {
+      
+      backdrop-filter: blur(10px);
+      color: black;
+      padding: 20px;
+      text-align: center;
+    }
+    .clicked-link {
+            color: black !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-6">
+                <div class="card blur">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="card-title">POPOK SPEED RUN</h5>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="sessionToken" class="form-label">sessionToken</label>
+                                <input type="text" class="form-control blur" id="sessionToken" name="sessionToken">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="game" class="form-label">Select Game</label>
+                                <select class="form-control blur" id="game" name="game">
+                                    <option value="Crazy Poki">Crazy Poki</option>
+                                    <option value="Diamond Flash">Diamond Flash</option>
+                                    <option value="Lost Treasure">Lost Treasure</option>
+                                    <option value="Richy Panda">Richy Panda</option>
+                                    <option value="The Power of Kitsune">The Power of Kitsune</option>
+                                    <option value="Los Toros">Los Toros</option>
+                                    <option value="FastMaster">FastMaster</option>
+                                    <option value="Yummy: Buy Feature">Yummy: Buy Feature</option>
+                                </select>
+                            </div>
+
+                            <button type="button" class="btn btn-primary blur" onclick="playGame()">Start</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-6">
+                <div class="card blur">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="card-title">Log</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="consoleContainer" style="height: 200px; overflow-y: scroll;">
+                            <textarea id="consoleOutput" rows="10" cols="50" readonly class="form-control blur"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+     <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-6">
+                <div class="card blur">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="card-title">LINK GAME MULTI</h5>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="urls" class="form-label">URL</label>
+                                <input type="text" class="form-control blur" id="urls" name="urls">
+                            </div>
+                            <button type="button" class="btn btn-primary blur" onclick="showURLs()">Show</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-6">
+                <div class="card blur">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="card-title">Output</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="displayURLs"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+ <footer class="footer">
+    <p>XNEWBIE</p>
+ </footer>
+    <script>
+        function showURLs() {
+            var urlsInput = document.getElementById("urls").value;
+            var urls = urlsInput.split(" ");
+            var displayURLs = document.getElementById("displayURLs");
+            displayURLs.innerHTML = "";
+
+            urls.forEach(function(url, index) {
+                var link = document.createElement("a");
+                link.href = url;
+                link.target = "_blank";
+                link.textContent = (index + 1) + ". " + url;
+                link.addEventListener("click", function() {
+                    link.classList.add("clicked-link");
+                });
+                displayURLs.appendChild(link);
+                displayURLs.appendChild(document.createElement("br"));
+            });
+        }
+
+        function playGame() {
+            var sessionToken = document.getElementById("sessionToken").value;
+            var game = document.getElementById("game").value;
+            var consoleOutput = document.getElementById("consoleOutput");
+    consoleOutput.value = "";
+            var wsEndPoint = 'wss://ws-se1.pokgaming.com';
+            var lang = 'en';
+            var gameId = 0;
+            var betPerLine = 0;
+            var lines = 0;
+            var doubleChance = false;
+            var gameMode = 'real';
+
+            if (game === 'FastMaster') {
+                gameId = 94;
+                betPerLine = 100;
+                lines = 10;
+                doubleChance = false;
+            } else if (game === 'Los Toros') {
+                gameId = 52;
+                betPerLine = 50;
+                lines = 10;
+                doubleChance = false;
+            } else if (game === 'Yummy: Buy Feature') {
+                gameId = 28;
+                betPerLine = 100;
+                lines = 10;
+                doubleChance = false;
+            } else if (game === 'Richy Panda') {
+                gameId = 45;
+                betPerLine = 10;
+                lines = 10;
+                doubleChance = false;
+            } else if (game === 'The Power of Kitsune') {
+                gameId = 72;
+                betPerLine = 100;
+                lines = 20;
+                doubleChance = false;
+            } else if (game === 'Crazy Poki') {
+                gameId = 42;
+                betPerLine = 20;
+                lines = 20;
+                doubleChance = false;
+            } else if (game === 'Lost Treasure') {
+                gameId = 27;
+                betPerLine = 10;
+                lines = 10;
+                doubleChance = false;
+            } else if (game === 'Diamond Flash') {
+                gameId = 2;
+                betPerLine = 20;
+                lines = 10;
+                doubleChance = false;
+            }
+            var ws_url = wsEndPoint + '?sessionToken=' + sessionToken + '&lang=' + lang + '&gameId=' + gameId;
+
+            var ws = new WebSocket(ws_url);
+
+            ws.onopen = function() {
+                logToConsole("Connection opened");
+
+                for (var i = 0; i < 300; i++) {
+                    var message = {
+                        "command": "play",
+                        "data": {
+                            "action": "spin",
+                            "game": game,
+                            "gameId": gameId,
+                            "betPerLine": betPerLine,
+                            "lines": lines,
+                            "doubleChance": doubleChance,
+                            "gameMode": gameMode
+                        },
+                        "cid": i + 1
+                    };
+
+                    ws.send(JSON.stringify(message));
+                }
+            };
+
+            ws.onmessage = function(event) {
+                
+
+                var response = JSON.parse(event.data);
+
+                if (response.message === 'Gamestateis6') {
+                    var free_spin_message = {
+                        "command": "play",
+                        "data": {
+                            "action": "freeSpin",
+                            "game": game,
+                            "gameId": gameId,
+                            "betPerLine": betPerLine,
+                            "lines": lines,
+                            "doubleChance": doubleChance,
+                            "gameMode": gameMode
+                        },
+                        "cid": 4
+                    };
+
+                    ws.send(JSON.stringify(free_spin_message));
+                } else if (response.message === 'Backend error.') {
+                    var fs_message = {
+                        "command": "play",
+                        "data": {
+                            "action": "spin",
+                            "game": game,
+                            "gameId": gameId,
+                            "betPerLine": betPerLine,
+                            "lines": lines,
+                            "doubleChance": doubleChance,
+                            "gameMode": gameMode
+                        },
+                        "cid": 4
+                    };
+
+                    ws.send(JSON.stringify(fs_message));
+                } else if (response.message === 'Gamestateis4') {
+                    var fs4_message = {
+                        "command": "play",
+                        "data": {
+                            "action": "bonus",
+                            "game": game,
+                            "gameId": gameId,
+                            "betPerLine": betPerLine,
+                            "lines": lines,
+                            "doubleChance": doubleChance,
+                            "gameMode": gameMode
+                        },
+                        "cid": 4
+                    };
+                    ws.send(JSON.stringify(fs4_message));
+                    var fs3_message = {
+                        "command": "play",
+                        "data": {
+                            "action": "bonus",
+                            "game": game,
+                            "gameId": gameId,
+                            "level": 1,
+                            "gameMode": gameMode,
+                            "clickIndex": 2
+                        },
+                        "cid": 4
+                    };
+                    ws.send(JSON.stringify(fs3_message));
+                    var fs2_message = {
+                        "command": "play",
+                        "data": {
+                            "action": "bonus",
+                            "game": game,
+                            "gameId": gameId,
+                            "level": 2,
+                            "gameMode": gameMode,
+                            "clickIndex": 4
+                        },
+                        "cid": 4
+                    };
+                    ws.send(JSON.stringify(fs2_message));
+                } else if (response.message === 'Gamestateis5') {
+                    var fs5_message = {
+                        "command": "play",
+                        "data": {
+                            "action": "superBonus",
+                            "game": game,
+                            "gameId": gameId,
+                            "clickIndex": 4,
+                            "gameMode": gameMode
+                        },
+                        "cid": 4
+                    };
+
+                    ws.send(JSON.stringify(fs5_message));
+                    var fs4_message = {
+                        "command": "play",
+                        "data": {
+                            "action": "superBonus",
+                            "gameId": gameId,
+                            "clickIndex": 3,
+                            "gameMode": gameMode
+                        },
+                        "cid": 4
+                    };
+
+                    ws.send(JSON.stringify(fs4_message));
+                } else if (response.message === 'Gamestateis2') {
+                    var fs2_message = {
+                        "command": "play",
+                        "data": {
+                            "action": "collect",
+                            "gameId": gameId,
+                            "gameMode": gameMode
+                        },
+                        "cid": 4
+                    };
+
+                    ws.send(JSON.stringify(fs2_message));
+                    var fs_message = {
+                        "command": "play",
+                        "data": {
+                            "action": "spin",
+                            "game": game,
+                            "gameId": gameId,
+                            "betPerLine": betPerLine,
+                            "lines": lines,
+                            "doubleChance": doubleChance,
+                            "gameMode": gameMode
+                        },
+                        "cid": 4
+                    };
+
+                    ws.send(JSON.stringify(fs_message));
+                } else if (response.message === 'Betvalueis100' || response.message === 'Betvalueis50' || response.message === 'Betvalueis10' || response.message === 'Betvalueis20') {
+    logToConsole("Done.");
+    
+    ws.close();
+                } else if (response.message === 'tournamentisfinish'){
+                  logToConsole("Tournament is finish");
+                  ws.close();
+                }
+                if (response.data) {
+                    var win = response.data.win;
+                    var lastWin = response.data.lastWin;
+                    var userBalance = response.data.userBalance;
+                    logToConsole("Win           : " + win);
+                    logToConsole("Last Win  : " + lastWin);
+                    logToConsole("Balance   : " + userBalance);
+                    
+                }
+            };
+
+            ws.onerror = function(error) {
+                logToConsole("Error: " + error);
+            };
+
+            ws.onclose = function() {
+                logToConsole("");
+            };
+
+            function logToConsole(message) {
+                var consoleOutput = document.getElementById("consoleOutput");
+                consoleOutput.value += message + "\n";
+                consoleOutput.scrollTop = consoleOutput.scrollHeight;
+            }
+        }
+        
+    </script>
+</body>
+</html>
