@@ -26,7 +26,16 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         }
-
+        .close-button {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            padding: 5px;
+            background-color: red;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
         .iframe-wrapper {
             margin-bottom: 20px;
         }
@@ -115,7 +124,7 @@
 
     <script>
         document.getElementById("myForm").addEventListener("submit", function(event) {
-            event.preventDefault(); // Mencegah form untuk melakukan submit
+            event.preventDefault();
 
             var urls = document.getElementById("urlInput").value.split(" ");
             for (var i = 0; i < urls.length; i++) {
@@ -126,10 +135,21 @@
                     var iframe = document.createElement("iframe");
                     iframe.src = url;
                     iframeWrapper.appendChild(iframe);
+                    var closeButton = document.createElement("button");
+                    closeButton.innerHTML = "X";
+                    closeButton.classList.add("close-button");
+                    closeButton.onclick = createCloseFunction(iframeWrapper);
                     document.getElementById("iframeContainer").appendChild(iframeWrapper);
+                    iframeWrapper.appendChild(closeButton);
                 }
             }
         });
+
+        function createCloseFunction(wrapper) {
+            return function() {
+                wrapper.remove();
+            };
+        }
     </script>
 </body>
 </html>
