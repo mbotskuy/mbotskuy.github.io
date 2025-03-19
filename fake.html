@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random User JSON</title>
+</head>
+<body>
+
+<pre id="jsonOutput"></pre>
+
+<script>
+    function getRandomUserAgent() {
+        let browsers = ["Chrome", "Firefox", "Edge", "Safari", "Opera"];
+        let osList = ["Windows NT 10.0", "Mac OS X 10_15_7", "Linux x86_64", "iPhone OS 16_2", "Android 11"];
+        let versions = [Math.floor(Math.random() * 40) + 80 + ".0.0.0", Math.floor(Math.random() * 20) + 90 + ".0.1"];
+
+        return `Mozilla/5.0 (${osList[Math.floor(Math.random() * osList.length)]}) AppleWebKit/537.36 (KHTML, like Gecko) ${browsers[Math.floor(Math.random() * browsers.length)]}/${versions[Math.floor(Math.random() * versions.length)]} Safari/537.36`;
+    }
+
+    function getRandomIP() {
+        return `${Math.floor(Math.random() * 255) + 1}.${Math.floor(Math.random() * 256)}.${Math.floor(Math.random() * 256)}.${Math.floor(Math.random() * 255) + 1}`;
+    }
+
+    function getRandomUsername() {
+        let prefixes = ["udinpetot", "adingodeng", "otoyalis", "ucilajil", "yugagi", "ajilbajil"];
+        return prefixes[Math.floor(Math.random() * prefixes.length)] + (Math.floor(Math.random() * 9000) + 1000);
+    }
+
+    let user = {
+        user_agent: getRandomUserAgent(),
+        ip_address: getRandomIP(),
+        username: getRandomUsername()
+    };
+
+    document.getElementById("jsonOutput").textContent = JSON.stringify(user, null, 4);
+</script>
+
+</body>
+</html>
